@@ -1,9 +1,17 @@
 function Template(elem) {
+    function checkParent(parent) {
+        if (!(parent instanceof HTMLElement) || (typeof parent) === "string") {
+            parent = document.getElementById(parent.replace(/^#/g, ''));
+        }
+        
+        return parent;
+    }
+    
     if (!elem) {
         throw new Error('No ID or element specified.');
     }
     
-    if (!(elem instanceof HTMLElement)) {
+    if (!(elem instanceof HTMLElement) || (typeof elem) === "string") {
         elem = document.getElementById(elem.replace(/^#/g, ''));
     }
     
@@ -45,26 +53,12 @@ function Template(elem) {
     });
     
     this.appendTo = function (parent = document.body) {
-        if (!parent) {
-            throw new Error('No parent element or parent ID specified.');
-        }
-    
-        if (!(parent instanceof HTMLElement)) {
-            parent = document.getElementById(parent.replace(/^#/g, ''));
-        }
-
-        parent.appendChild(elem.content.cloneNode(true));
+        checkParent(parent).appendChild(elem.content.cloneNode(true));
     }
     
     this.prependTo = function (parent = document.body) {
-        if (!parent) {
-            throw new Error('No parent element or parent ID specified.');
-        }
-    
-        if (!(parent instanceof HTMLElement)) {
-            parent = document.getElementById(parent.replace(/^#/g, ''));
-        }
+        
 
-        parent.prepend(elem.content.cloneNode(true));
+        checkParent(parent).prepend(elem.content.cloneNode(true));
     }
 }
